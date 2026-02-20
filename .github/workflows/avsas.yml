@@ -15,7 +15,7 @@ env:
 jobs:
   automation:
     name: Run Stream Automation
-    runs-on: ${{ env.OS }}
+    runs-on: ${{env.OS}}
     
     strategy:
       fail-fast: false
@@ -124,10 +124,3 @@ jobs:
             ./latest_logs/
           retention-days: 7
           if-no-files-found: warn
-
-      - name: Notify on failure
-        if: failure()
-        run: |
-          echo "⚠️  Browser automation job failed"
-          exit 1
-        shell: bash
