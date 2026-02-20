@@ -3,7 +3,7 @@ name: Stream Browser Automation
 on:
   schedule:
     # Run every 10 minutes
-    - cron: "*/8 * * * *"
+    - cron: "*/6 * * * *"
   workflow_dispatch:
 
 env:
@@ -15,15 +15,13 @@ env:
 jobs:
   automation:
     name: Run Stream Automation
-    runs-on: ${{ env.OS }}
-    
     strategy:
       fail-fast: false
       max-parallel: 1
       matrix:
         python-version: ["3.13"]
         os: [ubuntu-latest]
-
+    runs-on: ${{ matrix.OS }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
