@@ -162,41 +162,27 @@ class StreamBrowserAutomation:
         
         Continuously monitors the streaming page and manages multiple browser instances.
         """
-        try:
-            with SB(
-                uc=True, 
-                locale="en",
-                ad_block=True,
-                chromium_arg="--disable-webgl"
-            ) as primary_driver:
-                self._execute_automation_loop(primary_driver)
-        except Exception as e:
-            logger.error(f"Automation failed: {e}")
-            raise
-    
-    def _execute_automation_loop(self, primary_driver: SB) -> None:
-        """
-        Main loop for browser automation.
-        
-        Args:
-            primary_driver: Primary SeleniumBase driver instance.
-        """
         while True:
             try:
-                self._initialize_driver(primary_driver)
-                self._wait_for_stream_load(primary_driver)
-                self._accept_dialogs(primary_driver)
-                
-                # Check if live stream is present
-                if primary_driver.is_element_present(self.SELECTORS["live_stream"]):
+                with SB(
+                    uc=True, 
+                    locale="en",
+                    ad_block=True,
+                    chromium_arg="--disable-webgl"
+                ) as primary_driver:
+                    self._initialize_driver(primary_driver)
+                    self._wait_for_stream_load(primary_driver)
                     self._accept_dialogs(primary_driver)
-                    self._run_secondary_browser(primary_driver)
-                else:
-                    logger.info("Live stream not found, ending automation")
-                    break
                     
+                    # Check if live stream is present
+                    if primary_driver.is_element_present(self.SELECTORS["live_stream"]):
+                        self._accept_dialogs(primary_driver)
+                        self._run_secondary_browser(primary_driver)
+                    else:
+                        logger.info("Live stream not found, ending automation")
+                        break
             except Exception as e:
-                logger.error(f"Error in automation loop: {e}")
+                logger.error(f"Automation failed: {e}")
                 break
 
 
